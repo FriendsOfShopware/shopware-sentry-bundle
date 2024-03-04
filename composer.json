@@ -1,0 +1,17 @@
+{
+    "name": "frosh/sentry-bundle",
+    "version": "0.1.0",
+    "type": "library",
+    "description": "Integrates the Sentry SDK into Shopware",
+    "keywords": ["shopware", "sentry", "error", "monitoring"],
+    "homepage": "https://friendsofshopware.com",
+    "license": "MIT",
+    "require": {
+        "sentry/sentry-symfony": "^4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Frosh\\SentryBundle\\": "src/"
+        }
+    }
+}
