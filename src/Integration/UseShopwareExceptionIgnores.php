@@ -17,7 +17,7 @@ class UseShopwareExceptionIgnores implements IntegrationInterface
         $exceptions = $this->exceptions;
 
         Scope::addGlobalEventProcessor(function (Event $event) use($exceptions): ?Event {
-            $eventExceptions = $event->getExceptions()[0];
+            $eventExceptions = $event->getExceptions()[0] ?? null;
 
             if ($eventExceptions === null) {
                 return $event;
