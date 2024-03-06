@@ -45,7 +45,10 @@ sentry:
         release: '%env(SENTRY_RELEASE)%'
         # Trace 10% of requests
         traces_sample_rate: 0.1
-        sample_rate: 0.1
+
+# Optional: Report scheduled tasks status to Sentry. See https://docs.sentry.io/product/crons/ for more information and check pricing before enabling this feature.
+frosh_sentry:
+    report_scheduled_tasks: false
 ```
 
 ### Pictures
