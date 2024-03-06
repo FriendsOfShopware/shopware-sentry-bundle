@@ -11,10 +11,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
  */
 class FixRequestUrlListener
 {
-    public function __construct(private readonly HubInterface $hub)
-    {
-
-    }
+    public function __construct(private readonly HubInterface $hub) {}
 
     public function __invoke(RequestEvent $event): void
     {

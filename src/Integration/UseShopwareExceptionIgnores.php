@@ -11,15 +11,13 @@ class UseShopwareExceptionIgnores implements IntegrationInterface
     /**
      * @param array<string, array{log_level: string}> $exceptions
      */
-    public function __construct(private readonly array $exceptions)
-    {
-    }
+    public function __construct(private readonly array $exceptions) {}
 
     public function setupOnce(): void
     {
         $exceptions = $this->exceptions;
 
-        Scope::addGlobalEventProcessor(function (Event $event) use($exceptions): ?Event {
+        Scope::addGlobalEventProcessor(function (Event $event) use ($exceptions): ?Event {
             $eventExceptions = $event->getExceptions()[0] ?? null;
 
             if ($eventExceptions === null) {

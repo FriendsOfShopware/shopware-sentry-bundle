@@ -6,6 +6,7 @@ use Sentry\State\Scope;
 use Shopware\Core\System\SalesChannel\Event\SalesChannelContextCreatedEvent;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Contracts\Service\ResetInterface;
+
 use function Sentry\configureScope;
 
 class SalesChannelContextListener implements ResetInterface

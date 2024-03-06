@@ -22,6 +22,7 @@ use Shopware\Core\Framework\Struct\ArrayStruct;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Sentry\CheckInStatus;
 use Sentry\MonitorSchedule;
+
 use function Sentry\captureCheckIn;
 
 class ScheduledTaskSubscriber implements EventSubscriberInterface
@@ -34,9 +35,7 @@ class ScheduledTaskSubscriber implements EventSubscriberInterface
     public function __construct(
         private readonly EntityRepository $scheduledTaskRepository,
         private readonly bool $reportScheduledTasks
-    )
-    {
-    }
+    ) {}
 
     public static function getSubscribedEvents(): array
     {
