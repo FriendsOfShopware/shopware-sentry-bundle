@@ -2,12 +2,15 @@
 
 namespace Frosh\SentryBundle;
 
+use Frosh\SentryBundle\DependencyInjection\FroshSentryExtension;
 use Frosh\SentryBundle\Instrumentation\SentryProfiler;
 use Frosh\SentryBundle\Integration\UseShopwareExceptionIgnores;
 use Frosh\SentryBundle\Listener\FixRequestUrlListener;
 use Frosh\SentryBundle\Listener\SalesChannelContextListener;
+use Frosh\SentryBundle\Subscriber\ScheduledTaskSubscriber;
 use Shopware\Core\System\SalesChannel\Event\SalesChannelContextCreatedEvent;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -35,6 +38,17 @@ class ShopwareSentryBundle extends Bundle
             ->register(UseShopwareExceptionIgnores::class)
             ->addArgument('%frosh_sentry.exclude_exceptions%');
 
+        $container
+            ->register(ScheduledTaskSubscriber::class)
+            ->addArgument(new Reference('scheduled_task.repository'))
+            ->addArgument('%frosh_sentry.report_scheduled_tasks%')
+            ->addTag('kernel.event_subscriber');
+
         $container->addCompilerPass(new CompilerPass\ExceptionConfigCompilerPass());
+    }
+
+    public function getContainerExtension(): ExtensionInterface
+    {
+        return new FroshSentryExtension();
     }
 }
