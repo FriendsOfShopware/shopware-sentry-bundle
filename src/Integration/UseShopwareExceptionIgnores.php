@@ -8,6 +8,9 @@ use Sentry\State\Scope;
 
 class UseShopwareExceptionIgnores implements IntegrationInterface
 {
+    /**
+     * @param array<string, array{log_level: string}> $exceptions
+     */
     public function __construct(private readonly array $exceptions)
     {
     }

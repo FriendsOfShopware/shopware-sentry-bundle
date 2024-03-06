@@ -30,7 +30,7 @@ class FixRequestUrlListener
 
         $request = $event->getRequest();
 
-        $url = $request->attributes->get(RequestTransformer::ORIGINAL_REQUEST_URI);
+        $url = $request->attributes->get('sw-original-request-uri');
 
         if ($url === null) {
             return;

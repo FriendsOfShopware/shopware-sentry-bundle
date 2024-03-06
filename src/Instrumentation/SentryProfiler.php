@@ -17,6 +17,9 @@ class SentryProfiler implements ProfilerInterface
     /** @var array<Span> */
     private array $previousSpans = [];
 
+    /**
+     * @param array<string, string> $tags
+     */
     public function start(string $title, string $category, array $tags): void
     {
         $parent = SentrySdk::getCurrentHub()->getSpan();
@@ -24,7 +27,7 @@ class SentryProfiler implements ProfilerInterface
         if ($parent !== null) {
             $context = new SpanContext();
             $context->setOp($title);
-            $context->setTags(array_values($tags));
+            $context->setTags($tags);
             $span = $parent->startChild($context);
 
             SentrySdk::getCurrentHub()->setSpan($span);

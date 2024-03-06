@@ -12,7 +12,6 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Sentry\State\HubInterface;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 class ShopwareSentryBundle extends Bundle
 {
