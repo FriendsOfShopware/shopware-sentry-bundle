@@ -1,0 +1,5 @@
+/.gitignore export-ignore
+/devcontainer export-ignore
+/.github export-ignore
+/phpstan.neon export-ignore
+/README.md export-ignore
