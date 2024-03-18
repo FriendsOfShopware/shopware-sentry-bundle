@@ -10,7 +10,7 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
 class Configuration implements ConfigurationInterface
 {
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('frosh_sentry');
         $rootNode = $treeBuilder->getRootNode();
