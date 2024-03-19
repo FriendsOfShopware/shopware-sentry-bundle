@@ -5,7 +5,7 @@ This plugin integrates the [Sentry](https://sentry.io) error tracking service in
 ## Installation
 
 ```bash
-composer require frosh/sentry-bundle
+composer require "frosh/sentry-bundle:*" "sentry/sentry-symfony:*"
 ```
 
 ## Configuration
