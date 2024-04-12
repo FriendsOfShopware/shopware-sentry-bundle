@@ -28,7 +28,7 @@ class ExceptionConfigCompilerPass implements CompilerPassInterface
         return (new Processor())
             ->processConfiguration(
                 new Configuration($debug),
-                $container->getExtensionConfig($bundle)
+                $container->getExtensionConfig($bundle),
             );
     }
 }

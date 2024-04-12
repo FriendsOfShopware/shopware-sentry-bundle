@@ -34,7 +34,7 @@ class ScheduledTaskSubscriber implements EventSubscriberInterface
      */
     public function __construct(
         private readonly EntityRepository $scheduledTaskRepository,
-        private readonly bool $reportScheduledTasks
+        private readonly bool $reportScheduledTasks,
     ) {}
 
     public static function getSubscribedEvents(): array
@@ -92,7 +92,7 @@ class ScheduledTaskSubscriber implements EventSubscriberInterface
                 ScheduledTaskDefinition::STATUS_RUNNING => CheckInStatus::inProgress(),
                 ScheduledTaskDefinition::STATUS_SCHEDULED => CheckInStatus::ok(),
                 ScheduledTaskDefinition::STATUS_FAILED => CheckInStatus::error(),
-                default => null
+                default => null,
             };
 
             if ($checkInStatus !== null) {
@@ -123,7 +123,7 @@ class ScheduledTaskSubscriber implements EventSubscriberInterface
         return captureCheckIn(
             slug: $scheduledTask->getName(),
             status: CheckInStatus::inProgress(),
-            monitorConfig: $this->monitorConfig($scheduledTask)
+            monitorConfig: $this->monitorConfig($scheduledTask),
         );
     }
 
