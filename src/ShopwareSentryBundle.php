@@ -7,6 +7,7 @@ use Frosh\SentryBundle\Instrumentation\SentryProfiler;
 use Frosh\SentryBundle\Integration\UseShopwareExceptionIgnores;
 use Frosh\SentryBundle\Listener\FixRequestUrlListener;
 use Frosh\SentryBundle\Listener\SalesChannelContextListener;
+use Frosh\SentryBundle\Subscriber\FlowLogSubscriber;
 use Frosh\SentryBundle\Subscriber\ScheduledTaskSubscriber;
 use Shopware\Core\System\SalesChannel\Event\SalesChannelContextCreatedEvent;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -42,6 +43,10 @@ class ShopwareSentryBundle extends Bundle
             ->register(ScheduledTaskSubscriber::class)
             ->addArgument(new Reference('scheduled_task.repository'))
             ->addArgument('%frosh_sentry.report_scheduled_tasks%')
+            ->addTag('kernel.event_subscriber');
+
+        $container
+            ->register(FlowLogSubscriber::class)
             ->addTag('kernel.event_subscriber');
 
         $container->addCompilerPass(new CompilerPass\ExceptionConfigCompilerPass());
