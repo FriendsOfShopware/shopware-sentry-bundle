@@ -8,6 +8,15 @@ This plugin integrates the [Sentry](https://sentry.io) error tracking service in
 composer require "frosh/sentry-bundle:*" "sentry/sentry-symfony:*"
 ```
 
+Then, in `config/bundles.php` add
+
+```php
+Sentry\SentryBundle\SentryBundle::class => ['all' => true],
+Frosh\SentryBundle\ShopwareSentryBundle::class => ['all' => true],
+```
+
+at the end of the `$bundles` array.
+
 ## Configuration
 
 After installation, create a `config/packages/sentry.yaml` file in your Shopware installation and add the following configuration:
