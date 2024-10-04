@@ -103,7 +103,7 @@ class ScheduledTaskSubscriber implements EventSubscriberInterface
 
     private function captureCheckIn(ScheduledTaskEntity $scheduledTask, CheckInStatus $status): void
     {
-        if($status === CheckInStatus::inProgress()) {
+        if ($status === CheckInStatus::inProgress()) {
             $scheduledTask->removeExtension('sentryCheckInId');
             $checkInId = $this->getCheckInId($scheduledTask);
             $scheduledTask->addArrayExtension('sentryCheckInId', [$checkInId]);
@@ -116,7 +116,7 @@ class ScheduledTaskSubscriber implements EventSubscriberInterface
     private function getCheckInId(ScheduledTaskEntity $scheduledTask): ?string
     {
         $extension = $scheduledTask->getExtension('sentryCheckInId');
-        if($extension instanceof ArrayStruct) {
+        if ($extension instanceof ArrayStruct) {
             return \is_string($extension->get(0)) ? $extension->get(0) : null;
         }
 
