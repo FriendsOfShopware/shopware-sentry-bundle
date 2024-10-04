@@ -9,11 +9,11 @@ use Frosh\SentryBundle\Listener\FixRequestUrlListener;
 use Frosh\SentryBundle\Listener\SalesChannelContextListener;
 use Frosh\SentryBundle\Subscriber\FlowLogSubscriber;
 use Frosh\SentryBundle\Subscriber\ScheduledTaskSubscriber;
+use Shopware\Core\Framework\Bundle;
 use Shopware\Core\System\SalesChannel\Event\SalesChannelContextCreatedEvent;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Sentry\State\HubInterface;
 
@@ -21,6 +21,8 @@ class ShopwareSentryBundle extends Bundle
 {
     public function build(ContainerBuilder $container): void
     {
+        parent::build($container);
+
         $container
             ->register(SalesChannelContextListener::class)
             ->addTag('kernel.event_listener', ['event' => SalesChannelContextCreatedEvent::class, 'method' => '__invoke'])
