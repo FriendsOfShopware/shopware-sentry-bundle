@@ -33,7 +33,12 @@ class FlowLogSubscriber implements EventSubscriberInterface
             $additionalData = $innerEvent->getLogData();
         }
 
-        if ($logLevel->isLowerThan(Level::Warning)) {
+        // Fallback for Shopware 6.5 which returns an integer for LogAware::getLogLevel()
+        if (is_int($logLevel)) {
+            $logLevel = Level::tryFrom($logLevel);
+        }
+
+        if ($logLevel === null || $logLevel->isLowerThan(Level::Warning)) {
             return;
         }
 
