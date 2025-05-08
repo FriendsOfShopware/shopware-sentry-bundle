@@ -66,7 +66,7 @@ frosh_sentry:
 The sentry-symfony bundle provides a test command. Execute it!
 
 ```bash
-bin/console sentry
+bin/console sentry:test
 ```
 
 ## Pictures
