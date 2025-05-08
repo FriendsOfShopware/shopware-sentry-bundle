@@ -17,6 +17,8 @@ Frosh\SentryBundle\ShopwareSentryBundle::class => ['all' => true],
 
 at the end of the `$bundles` array.
 
+Symfony Flex might have added the SentryBundle as `'dev' => true` already. Adapt this.
+
 ## Configuration
 
 After installation, create a `config/packages/sentry.yaml` file in your Shopware installation and add the following configuration:
@@ -59,8 +61,15 @@ sentry:
 frosh_sentry:
     report_scheduled_tasks: false
 ```
+### Test
 
-### Pictures
+The sentry-symfony bundle provides a test command. Execute it!
+
+```bash
+bin/console sentry:test
+```
+
+## Pictures
 
 ![img](https://i.imgur.com/KUwUkxA.png)
 
