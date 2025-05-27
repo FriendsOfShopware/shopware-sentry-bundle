@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Frosh\SentryBundle\Subscriber;
 
-use MbCore\Component\Gallery\Entity\GalleryDefinition;
 use Sentry\MonitorConfig;
 use Sentry\MonitorScheduleUnit;
 use Shopware\Core\Framework\Api\Context\SystemSource;
