@@ -116,7 +116,7 @@ class ScheduledTaskSubscriber implements EventSubscriberInterface
     {
         $extension = $scheduledTask->getExtension('sentryCheckInId');
         if ($extension instanceof ArrayStruct) {
-            return \is_string($extension->get(0)) ? $extension->get(0) : null;
+            return \is_string($extension->offsetGet(0)) ? $extension->offsetGet(0) : null;
         }
 
         return captureCheckIn(
