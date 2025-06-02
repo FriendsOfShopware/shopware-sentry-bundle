@@ -1,0 +1,8 @@
+sentry:
+  options:
+    ignore_exceptions:
+      - 'Shopware\Storefront\Framework\Routing\Exception\SalesChannelMappingException'
+      - 'Shopware\Core\Framework\Api\Controller\Exception\AuthThrottledException'
+      - 'Shopware\Core\Framework\RateLimiter\Exception\RateLimitExceededException'
+      - 'Symfony\Component\Console\Exception\CommandNotFoundException'
+      - 'League\OAuth2\Server\Exception\OAuthServerException'
