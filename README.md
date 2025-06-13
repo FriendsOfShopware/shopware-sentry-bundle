@@ -49,6 +49,8 @@ sentry:
     messenger:
         enabled: true
     options:
+        # Do not sent deprecations to sentry
+        error_types: E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED
         integrations:
           # Use default exception ignore list of Shopware 
           - 'Frosh\SentryBundle\Integration\UseShopwareExceptionIgnores'
