@@ -1,0 +1,7 @@
+{% sw_extends '@Storefront/storefront/layout/meta.html.twig' %}
+
+{% block layout_head_javascript_feature %}
+    {% sw_include '@ShopwareSentryBundle/storefront/sentry.html.twig' %}
+
+    {{ parent() }}
+{% endblock %}
