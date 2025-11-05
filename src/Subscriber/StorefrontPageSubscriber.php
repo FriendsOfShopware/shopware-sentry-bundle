@@ -60,11 +60,11 @@ class StorefrontPageSubscriber implements EventSubscriberInterface
             'javascript_src' => sprintf("https://browser.sentry-cdn.com/%s/%s", $jsSdkVersion, $jsFile),
             'replay_recording' => [
                 'enabled' => $isReplayRecordingEnabled,
-                'sample_rate' => is_float($replaySample) ? $replaySample : 0.1,
+                'sample_rate' => is_numeric($replaySample) ? (float) $replaySample : 0.1,
             ],
             'tracing' => [
                 'enabled' => $isPerformanceTracingEnabled,
-                'sample_rate' => is_float($tracingSample) ? $tracingSample : 0.1,
+                'sample_rate' => is_numeric($tracingSample) ? (float) $tracingSample : 0.1,
             ],
             'release' => $this->sentryOptions->getRelease(),
             'environment' => $this->sentryOptions->getEnvironment(),
