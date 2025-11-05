@@ -16,7 +16,7 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->getRootNode();
 
         // @formatter:off
-        $rootNode // @phpstan-ignore-line
+        $rootNode
             ->children()
                 ->booleanNode('report_scheduled_tasks')->defaultFalse()->end()
                 ->arrayNode('storefront')

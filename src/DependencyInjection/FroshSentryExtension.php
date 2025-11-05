@@ -15,6 +15,7 @@ class FroshSentryExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container): void
     {
+        /** @var array<array<string>|bool|float|int|string|null> $config */
         $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
         $this->addConfig($container, $this->getAlias(), $config);
     }

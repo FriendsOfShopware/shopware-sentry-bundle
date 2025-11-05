@@ -37,11 +37,11 @@ class StorefrontPageSubscriber implements EventSubscriberInterface
         }
 
         $isReplayRecordingEnabled = $this->container->getParameter('frosh_sentry.storefront.replay_recording.enabled');
-        $isPerformanceTracingEnabled = $this->container->getParameter('frosh_sentry.storefront.tracing.enabled');
+        $isPerformanceTracingEnabled = $this->container->getParameter('frosh_sentry.storefront.tracing.enabled') === true;
 
         if ($isReplayRecordingEnabled && $isPerformanceTracingEnabled) {
             $jsFile = 'bundle.tracing.replay.min.js';
-        } elseif ($isReplayRecordingEnabled && !$isPerformanceTracingEnabled) {
+        } elseif ($isReplayRecordingEnabled && !$isPerformanceTracingEnabled) { /* @phpstan-ignore-line booleanNot.alwaysTrue / keep this for better readability */
             $jsFile = 'bundle.replay.min.js';
         } elseif (!$isReplayRecordingEnabled && $isPerformanceTracingEnabled) {
             $jsFile = 'bundle.tracing.min.js';
