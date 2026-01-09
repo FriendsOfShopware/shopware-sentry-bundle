@@ -27,6 +27,7 @@ After installation, create a `config/packages/sentry.yaml` file in your Shopware
 parameters:
     env(SENTRY_DSN): ''
     env(SENTRY_RELEASE): ''
+    env(SENTRY_ENVIRONMENT): '%kernel.environment%'
 
 # Tells Shopware to forward traces to Sentry
 shopware:
@@ -54,7 +55,7 @@ sentry:
         integrations:
           # Use default exception ignore list of Shopware 
           - 'Frosh\SentryBundle\Integration\UseShopwareExceptionIgnores'
-        environment: '%kernel.environment%'
+        environment: '%env(SENTRY_ENVIRONMENT)%'
         release: '%env(SENTRY_RELEASE)%'
         # Trace 10% of requests
         traces_sample_rate: 0.1
