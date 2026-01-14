@@ -1,0 +1,37 @@
+{% if sentry %}
+    {% block sentry %}
+        <script src="{{ sentry.javascript_src }}"></script>
+        <script>
+            Sentry.init({
+                dsn: '{{ sentry.dsn }}',
+                release: '{{ sentry.release }}',
+                environment: '{{ sentry.environment }}',
+                integrations: [
+                    {% if sentry.tracing.enabled -%}
+                    Sentry.browserTracingIntegration({
+                        enableInp: true,
+                        {% block sentry_additional_configuration_tracing %}{% endblock %}
+                        ...{ }
+                    }),
+                    {% endif -%}
+                    {% if sentry.replay_recording.enabled -%}
+                    Sentry.replayIntegration({
+                        blockAllMedia: false,
+                        maskAllText: false,
+                        {% block sentry_additional_configuration_replay %}{% endblock %}
+                        ...{ }
+                    }),
+                    {% endif -%}
+                ],
+                {% if sentry.tracing.enabled -%}
+                tracesSampleRate: {{ sentry.tracing.sample_rate }},
+                {% endif -%}
+                {% if sentry.replay_recording.enabled -%}
+                replaysSessionSampleRate: {{ sentry.replay_recording.sample_rate }},
+                {% endif -%}
+                {% block sentry_additional_configuration %}{% endblock %}
+                ...{ }
+            });
+        </script>
+    {% endblock %}
+{% endif %}

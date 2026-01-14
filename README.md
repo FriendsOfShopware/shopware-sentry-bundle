@@ -60,9 +60,22 @@ sentry:
         # Trace 10% of requests
         traces_sample_rate: 0.1
 
-# Optional: Report scheduled tasks status to Sentry. See https://docs.sentry.io/product/crons/ for more information and check pricing before enabling this feature.
 frosh_sentry:
+    # Optional: Report scheduled tasks status to Sentry. See https://docs.sentry.io/product/crons/ for more information and check pricing before enabling this feature.
     report_scheduled_tasks: false
+    storefront:
+        # optional: if you want track errors occurs within the browser (javascript/cors/csp)
+        enabled: true
+        # optional: if you want record the user sessions. Please aware the GDPR.
+        replay_recording:
+          enabled: true
+          sample_rate: 0.1
+        # optional: if you want measure the performance within the browser
+        tracing:
+          enabled: true
+          sample_rate: 0.1
+        # you should always specify a sdk version. If you do not provide any version, a hard-coded version got used. We try to keep the version up to date with the latest version, but cause the fast release-line of the javascript SDK it is recommend to update the version number regularly.
+        javascript_sdk_version: "8.26.0"
 ```
 ### Test
 

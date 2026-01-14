@@ -29,7 +29,7 @@ class FixRequestUrlListener
 
         $url = $request->attributes->get('sw-original-request-uri');
 
-        if ($url === null) {
+        if (!is_string($url)) {
             return;
         }
 
