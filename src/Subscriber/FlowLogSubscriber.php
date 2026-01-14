@@ -34,10 +34,12 @@ class FlowLogSubscriber implements EventSubscriberInterface
         }
 
         // Fallback for Shopware 6.5 which returns an integer for LogAware::getLogLevel()
+        // @phpstan-ignore-next-line
         if (is_int($logLevel)) {
             $logLevel = Level::tryFrom($logLevel);
         }
 
+        // @phpstan-ignore-next-line
         if ($logLevel === null || $logLevel->isLowerThan(Level::Warning)) {
             return;
         }
