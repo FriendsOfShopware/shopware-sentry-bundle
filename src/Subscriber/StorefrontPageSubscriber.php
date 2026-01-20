@@ -37,8 +37,10 @@ class StorefrontPageSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $isReplayRecordingEnabled = $this->container->getParameter('frosh_sentry.storefront.replay_recording.enabled');
-        $isPerformanceTracingEnabled = $this->container->getParameter('frosh_sentry.storefront.tracing.enabled') === true;
+        $isReplayRecordingEnabled = $this->container->hasParameter('frosh_sentry.storefront.replay_recording.enabled')
+            && $this->container->getParameter('frosh_sentry.storefront.replay_recording.enabled');
+        $isPerformanceTracingEnabled = $this->container->hasParameter('frosh_sentry.storefront.tracing.enabled')
+            && $this->container->getParameter('frosh_sentry.storefront.tracing.enabled') === true;
 
         if ($isReplayRecordingEnabled && $isPerformanceTracingEnabled) {
             $jsFile = 'bundle.tracing.replay.min.js';
@@ -53,8 +55,12 @@ class StorefrontPageSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $replaySample = $this->container->getParameter('frosh_sentry.storefront.replay_recording.sample_rate');
-        $tracingSample = $this->container->getParameter('frosh_sentry.storefront.tracing.sample_rate');
+        $replaySample = $this->container->hasParameter('frosh_sentry.storefront.replay_recording.sample_rate')
+            ? $this->container->getParameter('frosh_sentry.storefront.replay_recording.sample_rate')
+            : 0.1;
+        $tracingSample = $this->container->hasParameter('frosh_sentry.storefront.tracing.sample_rate')
+            ? $this->container->getParameter('frosh_sentry.storefront.tracing.sample_rate')
+            : 0.1;
 
         $event->setParameter('sentry', [
             'dsn' => $this->sentryOptions->getDsn(),
