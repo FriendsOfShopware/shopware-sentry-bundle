@@ -26,6 +26,7 @@ class StorefrontPageSubscriber implements EventSubscriberInterface
     public function onRender(StorefrontRenderEvent $event): void
     {
         if ($this->sentryOptions->getDsn() == null
+            || !$this->container->hasParameter('frosh_sentry.storefront.enabled')
             || !$this->container->getParameter('frosh_sentry.storefront.enabled')
         ) {
             return;
