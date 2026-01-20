@@ -25,7 +25,7 @@ class StorefrontPageSubscriber implements EventSubscriberInterface
 
     public function onRender(StorefrontRenderEvent $event): void
     {
-        if ($this->sentryOptions->getDsn() == null
+        if ($this->sentryOptions->getDsn() === null
             || !$this->container->hasParameter('frosh_sentry.storefront.enabled')
             || !$this->container->getParameter('frosh_sentry.storefront.enabled')
         ) {
@@ -38,7 +38,7 @@ class StorefrontPageSubscriber implements EventSubscriberInterface
         }
 
         $isReplayRecordingEnabled = $this->container->hasParameter('frosh_sentry.storefront.replay_recording.enabled')
-            && $this->container->getParameter('frosh_sentry.storefront.replay_recording.enabled');
+            && $this->container->getParameter('frosh_sentry.storefront.replay_recording.enabled') === true;
         $isPerformanceTracingEnabled = $this->container->hasParameter('frosh_sentry.storefront.tracing.enabled')
             && $this->container->getParameter('frosh_sentry.storefront.tracing.enabled') === true;
 
