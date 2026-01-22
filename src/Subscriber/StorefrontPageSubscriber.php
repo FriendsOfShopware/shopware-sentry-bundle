@@ -6,14 +6,17 @@ namespace Frosh\SentryBundle\Subscriber;
 
 use Sentry\Options;
 use Shopware\Storefront\Event\StorefrontRenderEvent;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class StorefrontPageSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private readonly ContainerInterface $container,
         private readonly Options $sentryOptions,
+        private readonly string $javascriptSdkVersion,
+        private readonly bool $replayRecordingEnabled,
+        private readonly float $replayRecordingSampleRate,
+        private readonly bool $tracingEnabled,
+        private readonly float $tracingSampleRate,
     ) {}
 
     public static function getSubscribedEvents(): array
@@ -25,53 +28,30 @@ class StorefrontPageSubscriber implements EventSubscriberInterface
 
     public function onRender(StorefrontRenderEvent $event): void
     {
-        if ($this->sentryOptions->getDsn() === null
-            || !$this->container->hasParameter('frosh_sentry.storefront.enabled')
-            || !$this->container->getParameter('frosh_sentry.storefront.enabled')
-        ) {
+        if ($this->sentryOptions->getDsn() === null) {
             return;
         }
 
-        $jsSdkVersion = $this->container->getParameter('frosh_sentry.storefront.javascript_sdk_version');
-        if (!is_string($jsSdkVersion)) {
-            return;
-        }
-
-        $isReplayRecordingEnabled = $this->container->hasParameter('frosh_sentry.storefront.replay_recording.enabled')
-            && $this->container->getParameter('frosh_sentry.storefront.replay_recording.enabled') === true;
-        $isPerformanceTracingEnabled = $this->container->hasParameter('frosh_sentry.storefront.tracing.enabled')
-            && $this->container->getParameter('frosh_sentry.storefront.tracing.enabled') === true;
-
-        if ($isReplayRecordingEnabled && $isPerformanceTracingEnabled) {
+        if ($this->replayRecordingEnabled && $this->tracingEnabled) {
             $jsFile = 'bundle.tracing.replay.min.js';
-        } elseif ($isReplayRecordingEnabled && !$isPerformanceTracingEnabled) { /* @phpstan-ignore-line booleanNot.alwaysTrue / keep this for better readability */
+        } elseif ($this->replayRecordingEnabled) {
             $jsFile = 'bundle.replay.min.js';
-        } elseif (!$isReplayRecordingEnabled && $isPerformanceTracingEnabled) {
+        } elseif ($this->tracingEnabled) {
             $jsFile = 'bundle.tracing.min.js';
-        } elseif (!$isReplayRecordingEnabled && !$isPerformanceTracingEnabled) {
-            $jsFile = 'bundle.min.js';
         } else {
-            // this case should never happen
-            return;
+            $jsFile = 'bundle.min.js';
         }
-
-        $replaySample = $this->container->hasParameter('frosh_sentry.storefront.replay_recording.sample_rate')
-            ? $this->container->getParameter('frosh_sentry.storefront.replay_recording.sample_rate')
-            : 0.1;
-        $tracingSample = $this->container->hasParameter('frosh_sentry.storefront.tracing.sample_rate')
-            ? $this->container->getParameter('frosh_sentry.storefront.tracing.sample_rate')
-            : 0.1;
 
         $event->setParameter('sentry', [
             'dsn' => $this->sentryOptions->getDsn(),
-            'javascript_src' => sprintf("https://browser.sentry-cdn.com/%s/%s", $jsSdkVersion, $jsFile),
+            'javascript_src' => sprintf('https://browser.sentry-cdn.com/%s/%s', $this->javascriptSdkVersion, $jsFile),
             'replay_recording' => [
-                'enabled' => $isReplayRecordingEnabled,
-                'sample_rate' => is_numeric($replaySample) ? (float) $replaySample : 0.1,
+                'enabled' => $this->replayRecordingEnabled,
+                'sample_rate' => $this->replayRecordingSampleRate,
             ],
             'tracing' => [
-                'enabled' => $isPerformanceTracingEnabled,
-                'sample_rate' => is_numeric($tracingSample) ? (float) $tracingSample : 0.1,
+                'enabled' => $this->tracingEnabled,
+                'sample_rate' => $this->tracingSampleRate,
             ],
             'release' => $this->sentryOptions->getRelease(),
             'environment' => $this->sentryOptions->getEnvironment(),

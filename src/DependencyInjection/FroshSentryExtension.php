@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Frosh\SentryBundle\DependencyInjection;
 
+use Frosh\SentryBundle\Subscriber\StorefrontPageSubscriber;
+use Sentry\Options;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
+use Symfony\Component\DependencyInjection\Reference;
 
 class FroshSentryExtension extends Extension
 {
@@ -15,9 +18,12 @@ class FroshSentryExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container): void
     {
-        /** @var array<array<string>|bool|float|int|string|null> $config */
+        /** @var array{report_scheduled_tasks: bool, storefront?: array{enabled: bool, javascript_sdk_version: string, replay_recording?: array{enabled: bool, sample_rate: float}, tracing?: array{enabled: bool, sample_rate: float}}} $config */
         $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
-        $this->addConfig($container, $this->getAlias(), $config);
+
+        $container->setParameter('frosh_sentry.report_scheduled_tasks', $config['report_scheduled_tasks']);
+
+        $this->registerStorefrontConfiguration($config['storefront'] ?? [], $container);
     }
 
     /**
@@ -29,16 +35,24 @@ class FroshSentryExtension extends Extension
     }
 
     /**
-     * @param array<array<string>|bool|float|int|string|null> $options
+     * @param array{enabled?: bool, javascript_sdk_version?: string, replay_recording?: array{enabled?: bool, sample_rate?: float}, tracing?: array{enabled?: bool, sample_rate?: float}} $config
      */
-    private function addConfig(ContainerBuilder $container, string $alias, array $options): void
+    private function registerStorefrontConfiguration(array $config, ContainerBuilder $container): void
     {
-        foreach ($options as $key => $option) {
-            $container->setParameter($alias . '.' . $key, $option);
-
-            if (\is_array($option)) {
-                $this->addConfig($container, $alias . '.' . $key, $option);
-            }
+        if (!($config['enabled'] ?? false)) {
+            return;
         }
+
+        $container
+            ->register(StorefrontPageSubscriber::class)
+            ->setArguments([
+                new Reference('sentry.client.options'),
+                $config['javascript_sdk_version'] ?? '8.26.0',
+                $config['replay_recording']['enabled'] ?? false,
+                $config['replay_recording']['sample_rate'] ?? 0.1,
+                $config['tracing']['enabled'] ?? false,
+                $config['tracing']['sample_rate'] ?? 0.1,
+            ])
+            ->addTag('kernel.event_subscriber');
     }
 }

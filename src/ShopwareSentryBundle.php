@@ -21,8 +21,6 @@ class ShopwareSentryBundle extends Bundle
 {
     public function build(ContainerBuilder $container): void
     {
-        parent::build($container);
-
         $container
             ->register(SalesChannelContextListener::class)
             ->addTag('kernel.event_listener', ['event' => SalesChannelContextCreatedEvent::class, 'method' => '__invoke'])
