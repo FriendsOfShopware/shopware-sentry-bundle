@@ -17,6 +17,8 @@ class StorefrontPageSubscriber implements EventSubscriberInterface
         private readonly float $replayRecordingSampleRate,
         private readonly bool $tracingEnabled,
         private readonly float $tracingSampleRate,
+        private readonly array $allowUrls,
+        private readonly array $denyUrls,
     ) {}
 
     public static function getSubscribedEvents(): array
@@ -53,6 +55,8 @@ class StorefrontPageSubscriber implements EventSubscriberInterface
                 'enabled' => $this->tracingEnabled,
                 'sample_rate' => $this->tracingSampleRate,
             ],
+            'allowUrls' => $this->allowUrls,
+            'denyUrls' => $this->denyUrls,
             'release' => $this->sentryOptions->getRelease(),
             'environment' => $this->sentryOptions->getEnvironment(),
         ]);

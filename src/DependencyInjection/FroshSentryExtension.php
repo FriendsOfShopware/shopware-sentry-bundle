@@ -52,6 +52,8 @@ class FroshSentryExtension extends Extension
                 $config['replay_recording']['sample_rate'] ?? 0.1,
                 $config['tracing']['enabled'] ?? false,
                 $config['tracing']['sample_rate'] ?? 0.1,
+                $config['allowUrls'] ?? [],
+                $config['denyUrls'] ?? [],
             ])
             ->addTag('kernel.event_subscriber');
     }
