@@ -66,6 +66,14 @@ frosh_sentry:
     storefront:
         # optional: if you want track errors occurs within the browser (javascript/cors/csp)
         enabled: true
+        # optional: if you want track errors only on specific urls/hosts
+        allowUrls:
+          - '"https://example.com"'
+          - /https?:\/\/((cdn|www)\.)?example\.com/
+        # optional: if you want to ignore errors for specific urls/hosts
+        denyUrls:
+          - '"https://example.com"'
+          - /https?:\/\/((cdn|www)\.)?example\.com/
         # optional: if you want record the user sessions. Please aware the GDPR.
         replay_recording:
           enabled: true
