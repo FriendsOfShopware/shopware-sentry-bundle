@@ -6,7 +6,6 @@ namespace Frosh\SentryBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
 class Configuration implements ConfigurationInterface
 {
@@ -16,6 +15,7 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->getRootNode();
 
         // @formatter:off
+        /** @phpstan-ignore class.notFound */
         $rootNode
             ->children()
                 ->booleanNode('report_scheduled_tasks')->defaultFalse()->end()

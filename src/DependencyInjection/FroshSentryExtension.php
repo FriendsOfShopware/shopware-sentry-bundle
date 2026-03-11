@@ -18,7 +18,7 @@ class FroshSentryExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container): void
     {
-        /** @var array{report_scheduled_tasks: bool, storefront?: array{enabled: bool, javascript_sdk_version: string, replay_recording?: array{enabled: bool, sample_rate: float}, tracing?: array{enabled: bool, sample_rate: float}}} $config */
+        /** @var array{report_scheduled_tasks: bool, storefront?: array{enabled: bool, javascript_sdk_version: string, allowUrls?: array{string}, denyUrls?: array{string}, replay_recording?: array{enabled: bool, sample_rate: float}, tracing?: array{enabled: bool, sample_rate: float}}} $config */
         $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
 
         $container->setParameter('frosh_sentry.report_scheduled_tasks', $config['report_scheduled_tasks']);
@@ -35,7 +35,7 @@ class FroshSentryExtension extends Extension
     }
 
     /**
-     * @param array{enabled?: bool, javascript_sdk_version?: string, replay_recording?: array{enabled?: bool, sample_rate?: float}, tracing?: array{enabled?: bool, sample_rate?: float}} $config
+     * @param array{enabled?: bool, javascript_sdk_version?: string, allowUrls?: array{string}, denyUrls?: array{string}, replay_recording?: array{enabled?: bool, sample_rate?: float}, tracing?: array{enabled?: bool, sample_rate?: float}} $config
      */
     private function registerStorefrontConfiguration(array $config, ContainerBuilder $container): void
     {
