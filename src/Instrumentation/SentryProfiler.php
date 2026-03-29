@@ -9,12 +9,10 @@ use Shopware\Core\Profiling\Integration\ProfilerInterface;
 
 class SentryProfiler implements ProfilerInterface
 {
-    /**
-     * @var array<string, Span>
-     */
+    /** @var array<string, list<Span>> */
     private array $spans = [];
 
-    /** @var array<Span> */
+    /** @var list<Span|null> */
     private array $previousSpans = [];
 
     /**
@@ -24,24 +22,26 @@ class SentryProfiler implements ProfilerInterface
     {
         $parent = SentrySdk::getCurrentHub()->getSpan();
 
-        if ($parent !== null) {
-            $context = new SpanContext();
-            $context->setOp($title);
-            $context->setTags($tags);
-            $span = $parent->startChild($context);
-
-            SentrySdk::getCurrentHub()->setSpan($span);
-
-            $this->spans[$title] = $span;
-            $this->previousSpans[] = $parent;
+        if ($parent === null) {
+            return;
         }
+
+        $context = new SpanContext();
+        $context->setOp($title);
+        $context->setTags($tags);
+
+        $span = $parent->startChild($context);
+
+        SentrySdk::getCurrentHub()->setSpan($span);
+
+        $this->spans[$title][] = $span;
+        $this->previousSpans[] = $parent;
     }
 
     public function stop(string $title): void
     {
-        if (isset($this->spans[$title])) {
-            $this->spans[$title]->finish();
-            unset($this->spans[$title]);
+        if (!empty($this->spans[$title])) {
+            array_pop($this->spans[$title])->finish();
         }
 
         SentrySdk::getCurrentHub()->setSpan(array_pop($this->previousSpans));
