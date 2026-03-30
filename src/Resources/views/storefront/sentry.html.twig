@@ -6,6 +6,20 @@
                 dsn: '{{ sentry.dsn }}',
                 release: '{{ sentry.release }}',
                 environment: '{{ sentry.environment }}',
+                {% if sentry.allowUrls -%}
+                allowUrls: [
+                    {% for url in sentry.allowUrls -%}
+                        {{ url|raw }},
+                    {% endfor -%}
+                ],
+                {% endif -%}
+                {% if sentry.denyUrls -%}
+                denyUrls: [
+                    {% for url in sentry.denyUrls -%}
+                        {{ url|raw }},
+                    {% endfor -%}
+                ],
+                {% endif -%}
                 integrations: [
                     {% if sentry.tracing.enabled -%}
                     Sentry.browserTracingIntegration({
