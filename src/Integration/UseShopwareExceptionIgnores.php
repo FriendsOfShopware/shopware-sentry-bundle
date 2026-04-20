@@ -5,34 +5,25 @@ namespace Frosh\SentryBundle\Integration;
 use Sentry\Event;
 use Sentry\Integration\IntegrationInterface;
 use Sentry\State\Scope;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class UseShopwareExceptionIgnores implements IntegrationInterface
 {
-    /**
-     * @param array<string, array{log_level: string}> $exceptions
-     */
-    public function __construct(private readonly array $exceptions) {}
+    public function __construct(private readonly EventDispatcherInterface $eventDispatcher)
+    {
+    }
 
     public function setupOnce(): void
     {
-        $exceptions = $this->exceptions;
+        $eventDispatcher = $this->eventDispatcher;
 
-        Scope::addGlobalEventProcessor(function (Event $event) use ($exceptions): ?Event {
-            $eventExceptions = $event->getExceptions()[0] ?? null;
-
-            if ($eventExceptions === null) {
+        Scope::addGlobalEventProcessor(static function (Event $event) use ($eventDispatcher): ?Event {
+            $exceptions = $event->getExceptions();
+            if (empty($exceptions)) {
                 return $event;
             }
-
-            $config = $exceptions[$eventExceptions->getType()] ?? [];
-
-            if (!isset($config['log_level'])) {
-                return $event;
-            }
-
-            if ($config['log_level'] === 'notice') {
-                return null;
-            }
+            $exceptions = $eventDispatcher->dispatch(new FilterExceptionEvent($exceptions))->getExceptions();
+            $event->setExceptions($exceptions);
 
             return $event;
         });
