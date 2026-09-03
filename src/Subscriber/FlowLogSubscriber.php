@@ -39,14 +39,13 @@ class FlowLogSubscriber implements EventSubscriberInterface
             $logLevel = Level::tryFrom($logLevel);
         }
 
-        // @phpstan-ignore-next-line
         if ($logLevel === null || $logLevel->isLowerThan(Level::Warning)) {
             return;
         }
 
-        $nestedException = null;
-        if (method_exists($innerEvent, 'getThrowable')) {
-            $nestedException = $innerEvent->getThrowable();
+        $nestedException = method_exists($innerEvent, 'getThrowable') ? $innerEvent->getThrowable() : null;
+        if (!$nestedException instanceof \Throwable) {
+            $nestedException = null;
         }
 
         captureException(new FlowEventException($innerEvent->getName(), $logLevel, $nestedException, $additionalData));
