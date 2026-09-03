@@ -18,10 +18,12 @@ class FroshSentryExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container): void
     {
-        /** @var array{report_scheduled_tasks: bool, storefront?: array{enabled: bool, javascript_sdk_version: string, replay_recording?: array{enabled: bool, sample_rate: float}, tracing?: array{enabled: bool, sample_rate: float}}} $config */
+        /** @var array{report_scheduled_tasks: bool, scheduled_tasks: array{checkin_margin: int|null, max_runtime: int|null}, storefront?: array{enabled: bool, javascript_sdk_version: string, replay_recording?: array{enabled: bool, sample_rate: float}, tracing?: array{enabled: bool, sample_rate: float}}} $config */
         $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
 
         $container->setParameter('frosh_sentry.report_scheduled_tasks', $config['report_scheduled_tasks']);
+        $container->setParameter('frosh_sentry.scheduled_tasks.checkin_margin', $config['scheduled_tasks']['checkin_margin']);
+        $container->setParameter('frosh_sentry.scheduled_tasks.max_runtime', $config['scheduled_tasks']['max_runtime']);
 
         $this->registerStorefrontConfiguration($config['storefront'] ?? [], $container);
     }

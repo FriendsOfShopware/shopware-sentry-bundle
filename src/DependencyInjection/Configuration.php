@@ -19,6 +19,13 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->booleanNode('report_scheduled_tasks')->defaultFalse()->end()
+                ->arrayNode('scheduled_tasks')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->integerNode('checkin_margin')->defaultNull()->min(1)->end()
+                        ->integerNode('max_runtime')->defaultNull()->min(1)->end()
+                    ->end()
+                ->end()
                 ->arrayNode('storefront')
                     ->addDefaultsIfNotSet()
                     ->children()

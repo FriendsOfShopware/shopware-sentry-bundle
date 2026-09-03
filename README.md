@@ -63,6 +63,11 @@ sentry:
 frosh_sentry:
     # Optional: Report scheduled tasks status to Sentry. See https://docs.sentry.io/product/crons/ for more information and check pricing before enabling this feature.
     report_scheduled_tasks: false
+    scheduled_tasks:
+        # Optional: minutes Sentry waits for a check-in after the expected time before the run is marked as missed. Defaults to Sentry's monitor default.
+        checkin_margin: 5
+        # Optional: minutes a run may take before Sentry marks it as timed out. Defaults to Sentry's monitor default.
+        max_runtime: 30
     storefront:
         # optional: if you want track errors occurs within the browser (javascript/cors/csp)
         enabled: true
