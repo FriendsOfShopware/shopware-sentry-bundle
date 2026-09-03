@@ -43,6 +43,8 @@ class ShopwareSentryBundle extends Bundle
             ->register(ScheduledTaskSubscriber::class)
             ->addArgument(new Reference('scheduled_task.repository'))
             ->addArgument('%frosh_sentry.report_scheduled_tasks%')
+            ->addArgument('%frosh_sentry.scheduled_tasks.checkin_margin%')
+            ->addArgument('%frosh_sentry.scheduled_tasks.max_runtime%')
             ->addTag('kernel.event_subscriber');
 
         $container

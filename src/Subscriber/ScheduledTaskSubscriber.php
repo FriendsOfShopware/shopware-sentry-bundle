@@ -34,6 +34,8 @@ class ScheduledTaskSubscriber implements EventSubscriberInterface
     public function __construct(
         private readonly EntityRepository $scheduledTaskRepository,
         private readonly bool $reportScheduledTasks,
+        private readonly ?int $checkinMargin = null,
+        private readonly ?int $maxRuntime = null,
     ) {}
 
     public static function getSubscribedEvents(): array
@@ -131,7 +133,7 @@ class ScheduledTaskSubscriber implements EventSubscriberInterface
         $interval = max(1, (int) ($scheduledTask->getRunInterval() / 60));
         $monitorSchedule = MonitorSchedule::interval($interval, MonitorScheduleUnit::minute());
 
-        return new MonitorConfig($monitorSchedule);
+        return new MonitorConfig($monitorSchedule, $this->checkinMargin, $this->maxRuntime);
     }
 
     private function fetchScheduledTaskCollection(): void
