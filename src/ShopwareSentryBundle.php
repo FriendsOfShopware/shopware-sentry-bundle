@@ -23,6 +23,7 @@ class ShopwareSentryBundle extends Bundle
     {
         $container
             ->register(SalesChannelContextListener::class)
+            ->addArgument('%frosh_sentry.report_customer_number%')
             ->addTag('kernel.event_listener', ['event' => SalesChannelContextCreatedEvent::class, 'method' => '__invoke'])
             ->addTag('kernel.reset', ['method' => 'reset']);
 

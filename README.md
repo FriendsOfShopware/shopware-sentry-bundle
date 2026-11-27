@@ -63,6 +63,8 @@ sentry:
 frosh_sentry:
     # Optional: Report scheduled tasks status to Sentry. See https://docs.sentry.io/product/crons/ for more information and check pricing before enabling this feature.
     report_scheduled_tasks: false
+    # Optional: Send the customer number of the logged-in customer as `user.username` with errors and traces. Please be aware of the GDPR.
+    report_customer_number: false
     scheduled_tasks:
         # Optional: minutes Sentry waits for a check-in after the expected time before the run is marked as missed. Defaults to Sentry's monitor default.
         checkin_margin: 5
