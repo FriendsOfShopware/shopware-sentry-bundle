@@ -55,6 +55,9 @@ class FroshSentryExtension extends Extension
                 $config['replay_recording']['sample_rate'] ?? 0.1,
                 $config['tracing']['enabled'] ?? false,
                 $config['tracing']['sample_rate'] ?? 0.1,
+                '%frosh_sentry.report_customer_number%',
+                '%shopware.http.cache.enabled%',
+                '%shopware.cache.invalidation.http_cache%',
             ])
             ->addTag('kernel.event_subscriber');
     }
