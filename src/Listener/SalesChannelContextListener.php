@@ -15,6 +15,8 @@ class SalesChannelContextListener implements ResetInterface
 
     private bool $registered = false;
 
+    public function __construct(private readonly bool $reportCustomerNumber) {}
+
     public function __invoke(SalesChannelContextCreatedEvent $event): void
     {
         $this->context = $event->getSalesChannelContext();
@@ -35,7 +37,13 @@ class SalesChannelContextListener implements ResetInterface
         }
 
         if ($customer = $this->context->getCustomer()) {
-            $scope->setUser(['id' => $customer->getId()]);
+            $user = ['id' => $customer->getId()];
+
+            if ($this->reportCustomerNumber) {
+                $user['username'] = $customer->getCustomerNumber();
+            }
+
+            $scope->setUser($user);
         }
 
         $scope->setContext('Sales Channel', [

@@ -32,6 +32,9 @@
                 {% block sentry_additional_configuration %}{% endblock %}
                 ...{ }
             });
+            {% if sentry.user -%}
+            Sentry.setUser({ username: '{{ sentry.user.username|e('js') }}' });
+            {% endif -%}
         </script>
     {% endblock %}
 {% endif %}

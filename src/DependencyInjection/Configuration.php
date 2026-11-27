@@ -19,6 +19,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->booleanNode('report_scheduled_tasks')->defaultFalse()->end()
+                ->booleanNode('report_customer_number')->defaultFalse()->end()
                 ->arrayNode('scheduled_tasks')
                     ->addDefaultsIfNotSet()
                     ->children()

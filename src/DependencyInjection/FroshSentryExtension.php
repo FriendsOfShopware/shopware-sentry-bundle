@@ -18,10 +18,11 @@ class FroshSentryExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container): void
     {
-        /** @var array{report_scheduled_tasks: bool, scheduled_tasks: array{checkin_margin: int|null, max_runtime: int|null}, storefront?: array{enabled: bool, javascript_sdk_version: string, replay_recording?: array{enabled: bool, sample_rate: float}, tracing?: array{enabled: bool, sample_rate: float}}} $config */
+        /** @var array{report_scheduled_tasks: bool, report_customer_number: bool, scheduled_tasks: array{checkin_margin: int|null, max_runtime: int|null}, storefront?: array{enabled: bool, javascript_sdk_version: string, replay_recording?: array{enabled: bool, sample_rate: float}, tracing?: array{enabled: bool, sample_rate: float}}} $config */
         $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
 
         $container->setParameter('frosh_sentry.report_scheduled_tasks', $config['report_scheduled_tasks']);
+        $container->setParameter('frosh_sentry.report_customer_number', $config['report_customer_number']);
         $container->setParameter('frosh_sentry.scheduled_tasks.checkin_margin', $config['scheduled_tasks']['checkin_margin']);
         $container->setParameter('frosh_sentry.scheduled_tasks.max_runtime', $config['scheduled_tasks']['max_runtime']);
 
@@ -54,6 +55,9 @@ class FroshSentryExtension extends Extension
                 $config['replay_recording']['sample_rate'] ?? 0.1,
                 $config['tracing']['enabled'] ?? false,
                 $config['tracing']['sample_rate'] ?? 0.1,
+                '%frosh_sentry.report_customer_number%',
+                '%shopware.http.cache.enabled%',
+                '%shopware.cache.invalidation.http_cache%',
             ])
             ->addTag('kernel.event_subscriber');
     }
